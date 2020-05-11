@@ -3,7 +3,7 @@ import { API_URL, API_KEY } from "../../config";
 
 export const useMovieFetch = (movieId) => {
   const [state, setState] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const fetchData = useCallback(
@@ -21,6 +21,7 @@ export const useMovieFetch = (movieId) => {
         //ophalen van de credits gegevens obv movieId
         const creditsEndpoint = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}`;
         const creditsResult = await (await fetch(creditsEndpoint)).json();
+        // filter de uit de creditsgegeven / crew de job van director
         const directors = creditsResult.crew.filter(
           (member) => member.job === "Director"
         );
@@ -43,8 +44,18 @@ export const useMovieFetch = (movieId) => {
 
   // uitvoeren van de functie fetchData
   useEffect(() => {
-    fetchData();
+    if (localStorage[movieId]) {
+      setState(JSON.parse(localStorage[movieId]));
+      setLoading(false);
+    } else {
+      fetchData();
+    }
   }, [fetchData]);
+
+  // data opslaan local storage
+  useEffect(() => {
+    localStorage.setItem(movieId, JSON.stringify(state));
+  }, [movieId, state]);
 
   //teruggeven van de data
   return [state, loading, error];
