@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { API_URL, API_KEY } from "../../config";
 
 export const useMovieFetch = (movieId) => {
@@ -50,7 +50,7 @@ export const useMovieFetch = (movieId) => {
     } else {
       fetchData();
     }
-  }, [fetchData]);
+  }, [fetchData, movieId]);
 
   // data opslaan local storage
   useEffect(() => {

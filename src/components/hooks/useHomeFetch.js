@@ -34,18 +34,15 @@ export const useHomeFetch = (searchTerm) => {
   // Fetch popular movies initially on mount
   useEffect(() => {
     if (sessionStorage.homeState) {
-      console.log("grabbing from session storage");
       setState(JSON.parse(sessionStorage.homeState));
       setLoading(false);
     } else {
-      console.log("grabbing from api");
       fetchMovies(POPULAR_BASE_URL);
     }
   }, []);
 
   useEffect(() => {
     if (!searchTerm) {
-      console.log("writing to session storage");
       sessionStorage.setItem("homeState", JSON.stringify(state));
     }
   }, [searchTerm, state]);
